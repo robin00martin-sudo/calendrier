@@ -9,3 +9,5 @@ Point d'entrée : index.php -> qui nous donne sur un menu pour la sélection d'u
 
 calendrier.php permet de gérer la page web qui affichera les calendriers et les télécharger en PDF.
 function_optimize.php permet de générer le calendrier et les jour féries en se basant sur pâques pour les jours mobiles.
+
+Et le fichier qui à pour nom un mot de passe wifi est une simple image de fond pour l'index.php.
