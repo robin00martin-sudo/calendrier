@@ -5,9 +5,11 @@ Le but était de réaliser un site web capable de générer un calendrier franç
 
 ! Très chaotique, aucune architecture existante, aucune arborescence visible, vous pouvez retrouver en un seul fichier du JavaScript, du PHP et du HTML !
 
+
 Point d'entrée : index.php -> qui nous donne sur un menu pour la sélection d'une année et d'une formation.
 
 calendrier.php permet de gérer la page web qui affichera les calendriers et les télécharger en PDF.
+
 function_optimize.php permet de générer le calendrier et les jour féries en se basant sur pâques pour les jours mobiles.
 
 Et le fichier qui à pour nom un mot de passe wifi est une simple image de fond pour l'index.php.
