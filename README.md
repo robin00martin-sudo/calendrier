@@ -1,15 +1,23 @@
 # calendrier
 
-1er projet réaliser en développement web en autonomie.
-Le but était de réaliser un site web capable de générer un calendrier français pour 3 années consécutive à partir d'une année donnée tout en s'assurant que les jour féries fixes et mobiles soit respecté, ainsi que la capacité de le télécharger en PDF, de pouvoir choisir la formation lié au calendrier depuis une BDD très simple, et la capacité de sélectionnée dans le calendrier des jours pour les passer en violet. 
+1er projet réalisé en développement web, en autonomie.
+Site web qui génère un calendrier français sur **3 années consécutives** à partir d'une année donnée, avec les jours fériés **fixes et mobiles** (calculés à partir de Pâques), le choix de la formation liée au calendrier (base de données très simple), la **sélection de jours** (passés en violet) et l'**export en PDF**.
 
-! Très chaotique, aucune architecture existante, aucune arborescence visible, vous pouvez retrouver en un seul fichier du JavaScript, du PHP et du HTML !
+Projet volontairement simple, sans framework : PHP, HTML et JavaScript cohabitent dans les mêmes fichiers.
 
+## Installation
+1. Importer `formations.sql` (crée la base `formation` et la table `formations`).
+2. Copier `config.example.php` en `config.local.php` (ignoré par Git) et renseigner la connexion MySQL
+   (ou définir les variables d'environnement `DB_HOST`, `DB_PORT`, `DB_NAME`, `DB_USER`, `DB_PASS`).
+3. Extensions PHP requises : `pdo_mysql` et `calendar`. Ouvrir `index.php`.
 
-Point d'entrée : index.php -> qui nous donne sur un menu pour la sélection d'une année et d'une formation.
+## Fichiers
+- `index.php` : point d'entrée (choix de l'année et de la formation).
+- `calendrier.php` : page des calendriers, sélection de jours, export PDF (jsPDF + html2canvas, chargés depuis cdnjs).
+- `function_optimize.php` : plage d'années valide, Pâques, jours fériés, génération du tableau.
+- `config.php` : connexion PDO unique. `config.example.php` : modèle de configuration.
+- `fond.jpg` : image de fond de la page d'accueil.
 
-calendrier.php permet de gérer la page web qui affichera les calendriers et les télécharger en PDF.
-
-function_optimize.php permet de générer le calendrier et les jour féries en se basant sur pâques pour les jours mobiles.
-
-Et le fichier qui à pour nom un mot de passe wifi est une simple image de fond pour l'index.php.
+## Contrôles
+L'année doit être comprise entre 1970 (limite de `easter_date()`) et 2097 (PHP ≥ 8.3, sinon 2035) ; la formation doit exister.
+En cas d'erreur, retour à l'accueil avec un message.
