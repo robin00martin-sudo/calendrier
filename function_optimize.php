@@ -1,8 +1,24 @@
 <?php
-// Set year from GET or default to current year
-$startYear = isset($_GET['year']) ? intval($_GET['year']) : date('Y');
+/* ===== Plage d'années acceptée =====
+ * easter_date() ne fonctionne qu'à partir de 1970. Avant PHP 8.3 (ou en 32 bits),
+ * la limite haute est 2037 ; ensuite 2099. Le calendrier affiche 3 années d'affilée :
+ * l'année de départ doit donc laisser 2 années de marge. */
+function anneeMin(): int { return 1970; }
+function anneeMax(): int {
+    $limite = (PHP_VERSION_ID >= 80300 && PHP_INT_SIZE === 8) ? 2099 : 2037;
+    return $limite - 2;
+}
+
+/** Lit une année dans la requête ; retourne null si absente ou hors plage. */
+function lireAnnee($valeur): ?int {
+    $annee = filter_var($valeur, FILTER_VALIDATE_INT, ['options' => [
+        'min_range' => anneeMin(), 'max_range' => anneeMax(),
+    ]]);
+    return $annee === false ? null : $annee;
+}
 
 /* ===== Movable Feasts ===== */
+/** easter_date() renvoie le DIMANCHE de Pâques. */
 function paques($year) {
     return date("Y-m-d", easter_date($year));
 }
@@ -14,13 +30,12 @@ function addDaysToPaques($year, $days) {
 /* ===== Public Holidays (France) ===== */
 function jours_feries($year) {
     return [
-        addDaysToPaques($year, 1),   // Dimanche de Pâques
-        addDaysToPaques($year, 2),   // Lundi de Pâques
-        addDaysToPaques($year, 40),  // Jeudi de l'Ascension
-        addDaysToPaques($year, 50),  // Dimanche de Pentecôte
-        addDaysToPaques($year, 51),  // Lundi de Pentecôte
+        // Fériés mobiles (décalages par rapport au dimanche de Pâques)
+        addDaysToPaques($year, 1),   // Lundi de Pâques
+        addDaysToPaques($year, 39),  // Jeudi de l'Ascension
+        addDaysToPaques($year, 50),  // Lundi de Pentecôte
 
-        // Fixed holidays
+        // Fériés fixes
         "$year-01-01", // Jour de l'an
         "$year-05-01", // Fête du travail
         "$year-05-08", // Victoire 1945
@@ -85,4 +100,3 @@ function generateCalendarAnnuaire($year, $selectedFormation = []) {
 
     echo "</table></div></div><br>";
 }
-?>
